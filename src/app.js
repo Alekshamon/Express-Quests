@@ -2,6 +2,8 @@ const express = require("express");
 
 const app = express();
 
+const { hashPassword } = require("./middlewares/auth");
+
 app.use(express.json());
 
 const movieControllers = require("./controllers/movieControllers");
@@ -26,7 +28,8 @@ app.delete("/api/users/:id", userControllers.deleteUser);
 //middlewares
 app.post("/api/movies", validateMovie, movieControllers.postMovie);
 app.put("/api/movies:id", validateMovie, movieControllers.updateMovie);
-const { hashPassword } = require("./auth.js");
 app.post("/api/users", hashPassword, userControllers.postUser);
 app.put("/api/users:id", hashPassword, userControllers.updateUser);
+app.post("/api/users", validateUser, userControllers.postUser);
+app.put("/api/users:id", validateUser, userControllers.updateUser);
 module.exports = app;
