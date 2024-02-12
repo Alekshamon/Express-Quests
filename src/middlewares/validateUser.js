@@ -1,5 +1,7 @@
+const { hashPassword } = require("./auth");
+
 const validateUser = (req, res, next) => {
-  const { firstname, lastname, city, language } = req.body;
+  const { firstname, lastname, city, language, hashPassword } = req.body;
   const { email } = req.body;
   const errors = [];
   const emailRegex = /[a-z0-9._]+@[a-z0-9-]+\.[a-z]{2,3}/;
@@ -23,7 +25,9 @@ const validateUser = (req, res, next) => {
   if (language == null) {
     errors.push({ field: "language", message: "This field is required" });
   }
-
+  if (hashPassword == null) {
+    errors.push({ field: "hashedPassword", message: "This field is required" });
+  }
   if (errors.length) {
     res.status(422).json({ validationErrors: errors });
   } else {
